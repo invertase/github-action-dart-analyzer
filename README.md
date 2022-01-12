@@ -9,11 +9,15 @@
 
 TODO
 
-Example annotation output:
+**Example annotation output**:
 
 1) ![image](https://user-images.githubusercontent.com/5347038/149161220-dbd92743-2cdc-4083-b7f2-31ed9ca7f855.png)
 2) ![image](https://user-images.githubusercontent.com/5347038/149161397-d6a72437-a15f-4dbb-a6b5-227bd11da210.png)
 3) ![image](https://user-images.githubusercontent.com/5347038/149161493-66e2b7f6-177a-4daa-bb66-9d0a26ba391d.png)
+
+**Example workflow logs output**:
+
+![image](https://user-images.githubusercontent.com/5347038/149162346-573bf836-489f-458f-8501-60148d2104cd.png)
 
 
 ---
