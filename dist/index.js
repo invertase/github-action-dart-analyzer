@@ -239,8 +239,11 @@ function run() {
             core.setOutput('infos', result.infos.length.toString());
             core.setOutput('warnings', result.warnings.length.toString());
             core.setOutput('errors', result.errors.length.toString());
+            core.info(`${result.infos.length} analyzer hints detected.`);
+            core.info(`${result.warnings.length} analyzer warnings detected.`);
+            core.info(`${result.errors.length} analyzer errors detected.`);
             if (actionDidFail) {
-                core.setFailed(`Dart Analyzer detected problems.`);
+                core.setFailed(`Dart Analyzer detected problems see the logs for more information.`);
             }
             else {
                 core.info(`Finished.`);
