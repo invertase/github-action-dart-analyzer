@@ -1,11 +1,30 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: "Dart Analyze"
+description: "A GitHub action to run Dart analyzer with annotation support."
+author: "Invertase"
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  fatal-infos:
+    required: false
+    description: "Treat info level issues as fatal."
+    default: "false"
+  fatal-warnings:
+    required: false
+    description: "Treat warning level issues as fatal (defaults to true)."
+    default: "true"
+  annotate:
+    required: false
+    description: "Whether to add annotations to GitHub actions summary / PR review files. (defaults to true)."
+    default: "true"
+  annotate-only:
+    required: false
+    description: "If set to true only annotations will be created and the GitHub action itself will not fail on Dart analyzer problems. (defaults to false)."
+    default: "false"
+  working-directory:
+    required: false
+    description: "The working directory to run the Dart analyzer in (defaults to `./`)."
+    default: ./
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node12"
+  main: "dist/index.js"
+branding:
+  icon: "hexagon"
+  color: "gray-dark"

@@ -1,0 +1,5 @@
+linter:
+  rules:
+    avoid_print: true
+    avoid_empty_else: true
+    annotate_overrides: true
