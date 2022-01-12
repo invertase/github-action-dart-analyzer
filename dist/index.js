@@ -145,12 +145,12 @@ function getAnnotationMessage(problem) {
     let message = ``;
     if (problem.correctionMessage) {
         if (message.length)
-            message += '\n\n';
+            message += '\n';
         message += `${problem.correctionMessage}`;
     }
     if (problem.documentation) {
         if (message.length)
-            message += '\n\n';
+            message += '\n';
         message += `See ${problem.documentation} to learn more about this problem.`;
     }
     return message;
@@ -178,47 +178,50 @@ function run() {
             core.debug(`Running Dart analyzer with options: ${JSON.stringify(options)}`);
             const result = yield (0, dart_1.analyze)(options.workingDirectory);
             // Report info problems.
+            core.startGroup('Dart Analyzer - Infos');
             if (result.infos.length) {
-                core.startGroup('Dart Analyzer - Infos');
-                if (!result.infos.length) {
-                    core.info('No info problems detected.');
-                }
                 for (const info of result.infos) {
                     core.info(getProblemLogMessage(info, !options.annotate));
                     if (options.annotate) {
                         core.notice(getAnnotationMessage(info), getProblemAnnotationProperties(info));
                     }
+                    core.info('');
                 }
-                core.endGroup();
             }
+            else {
+                core.info('No info problems detected.');
+            }
+            core.endGroup();
             // Report warning problems.
+            core.startGroup('Dart Analyzer - Warnings');
             if (result.warnings.length) {
-                core.startGroup('Dart Analyzer - Warnings');
-                if (!result.warnings.length) {
-                    core.info('No warning problems detected.');
-                }
                 for (const warning of result.warnings) {
                     core.info(getProblemLogMessage(warning, !options.annotate));
                     if (options.annotate) {
                         core.warning(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
                     }
+                    core.info('');
                 }
-                core.endGroup();
             }
+            else {
+                core.info('No warning problems detected.');
+            }
+            core.endGroup();
             // Report error problems.
+            core.startGroup('Dart Analyzer - Errors');
             if (result.errors.length) {
-                core.startGroup('Dart Analyzer - Errors');
-                if (!result.errors.length) {
-                    core.info('No error problems detected.');
-                }
                 for (const error of result.errors) {
                     core.info(getProblemLogMessage(error, !options.annotate));
                     if (options.annotate) {
                         core.error(getAnnotationMessage(error), getProblemAnnotationProperties(error));
                     }
+                    core.info('');
                 }
-                core.endGroup();
             }
+            else {
+                core.info('No error problems detected.');
+            }
+            core.endGroup();
             let actionDidFail = false;
             if (options.fatalInfos && result.infos.length) {
                 actionDidFail = true;
