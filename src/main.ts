@@ -2,10 +2,16 @@ import * as core from '@actions/core';
 import * as path from 'path';
 import { AnalyzerOptions, AnalyzerProblem, analyze } from './dart';
 
-function getProblemLogMessage(problem: AnalyzerProblem): string {
+function getProblemLogMessage(
+  problem: AnalyzerProblem,
+  detailed = false,
+): string {
   let message = `${problem.location.file}:${problem.location.range.start.line}:${problem.location.range.start.column} ${problem.problemMessage}`;
-  if (problem.correctionMessage) {
-    message += `  └ ${problem.correctionMessage}`;
+  if (detailed && problem.correctionMessage) {
+    message += `\n  └ ${problem.correctionMessage}`;
+  }
+  if (detailed && problem.documentation) {
+    message += `\n  └ ${problem.documentation}`;
   }
   return message;
 }
@@ -57,8 +63,11 @@ async function run(): Promise<void> {
     // Report info problems.
     if (result.infos.length) {
       core.startGroup('Dart Analyzer - Infos');
+      if (!result.infos.length) {
+        core.info('No info problems detected.');
+      }
       for (const info of result.infos) {
-        core.info(getProblemLogMessage(info));
+        core.info(getProblemLogMessage(info, !options.annotate));
         if (options.annotate) {
           core.notice(
             getAnnotationMessage(info),
@@ -72,8 +81,11 @@ async function run(): Promise<void> {
     // Report warning problems.
     if (result.warnings.length) {
       core.startGroup('Dart Analyzer - Warnings');
+      if (!result.warnings.length) {
+        core.info('No warning problems detected.');
+      }
       for (const warning of result.warnings) {
-        core.info(getProblemLogMessage(warning));
+        core.info(getProblemLogMessage(warning, !options.annotate));
         if (options.annotate) {
           core.warning(
             getAnnotationMessage(warning),
@@ -87,8 +99,11 @@ async function run(): Promise<void> {
     // Report error problems.
     if (result.errors.length) {
       core.startGroup('Dart Analyzer - Errors');
+      if (!result.errors.length) {
+        core.info('No error problems detected.');
+      }
       for (const error of result.errors) {
-        core.info(getProblemLogMessage(error));
+        core.info(getProblemLogMessage(error, !options.annotate));
         if (options.annotate) {
           core.error(
             getAnnotationMessage(error),
@@ -129,6 +144,8 @@ async function run(): Promise<void> {
     core.setOutput('errors', result.errors.length.toString());
     if (actionDidFail) {
       core.setFailed(`Dart Analyzer detected problems.`);
+    } else {
+      core.info(`Finished.`);
     }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);

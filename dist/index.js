@@ -131,10 +131,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const path = __importStar(__nccwpck_require__(622));
 const dart_1 = __nccwpck_require__(867);
-function getProblemLogMessage(problem) {
+function getProblemLogMessage(problem, detailed = false) {
     let message = `${problem.location.file}:${problem.location.range.start.line}:${problem.location.range.start.column} ${problem.problemMessage}`;
-    if (problem.correctionMessage) {
-        message += `  └ ${problem.correctionMessage}`;
+    if (detailed && problem.correctionMessage) {
+        message += `\n  └ ${problem.correctionMessage}`;
+    }
+    if (detailed && problem.documentation) {
+        message += `\n  └ ${problem.documentation}`;
     }
     return message;
 }
@@ -177,8 +180,11 @@ function run() {
             // Report info problems.
             if (result.infos.length) {
                 core.startGroup('Dart Analyzer - Infos');
+                if (!result.infos.length) {
+                    core.info('No info problems detected.');
+                }
                 for (const info of result.infos) {
-                    core.info(getProblemLogMessage(info));
+                    core.info(getProblemLogMessage(info, !options.annotate));
                     if (options.annotate) {
                         core.notice(getAnnotationMessage(info), getProblemAnnotationProperties(info));
                     }
@@ -188,8 +194,11 @@ function run() {
             // Report warning problems.
             if (result.warnings.length) {
                 core.startGroup('Dart Analyzer - Warnings');
+                if (!result.warnings.length) {
+                    core.info('No warning problems detected.');
+                }
                 for (const warning of result.warnings) {
-                    core.info(getProblemLogMessage(warning));
+                    core.info(getProblemLogMessage(warning, !options.annotate));
                     if (options.annotate) {
                         core.warning(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
                     }
@@ -199,8 +208,11 @@ function run() {
             // Report error problems.
             if (result.errors.length) {
                 core.startGroup('Dart Analyzer - Errors');
+                if (!result.errors.length) {
+                    core.info('No error problems detected.');
+                }
                 for (const error of result.errors) {
-                    core.info(getProblemLogMessage(error));
+                    core.info(getProblemLogMessage(error, !options.annotate));
                     if (options.annotate) {
                         core.error(getAnnotationMessage(error), getProblemAnnotationProperties(error));
                     }
@@ -226,6 +238,9 @@ function run() {
             core.setOutput('errors', result.errors.length.toString());
             if (actionDidFail) {
                 core.setFailed(`Dart Analyzer detected problems.`);
+            }
+            else {
+                core.info(`Finished.`);
             }
         }
         catch (error) {
