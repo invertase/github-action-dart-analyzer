@@ -141,10 +141,14 @@ function getProblemLogMessage(problem) {
 function getAnnotationMessage(problem) {
     let message = ``;
     if (problem.correctionMessage) {
-        message += `\n\n${problem.correctionMessage}`;
+        if (message.length)
+            message += '\n\n';
+        message += `${problem.correctionMessage}`;
     }
     if (problem.documentation) {
-        message += `\n\nSee the [documentation](${problem.documentation}) to learn more about this problem.`;
+        if (message.length)
+            message += '\n\n';
+        message += `See ${problem.documentation} to learn more about this problem.`;
     }
     return message;
 }
