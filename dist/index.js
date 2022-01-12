@@ -132,19 +132,19 @@ const core = __importStar(__nccwpck_require__(186));
 const path = __importStar(__nccwpck_require__(622));
 const dart_1 = __nccwpck_require__(867);
 function getProblemLogMessage(problem) {
-    let message = `${problem.severity} ${problem.location.file}:${problem.location.range.start}:${problem.location.range.start.column}: ${problem.problemMessage}`;
+    let message = `${problem.location.file}:${problem.location.range.start.line}:${problem.location.range.start.column} ${problem.problemMessage}`;
     if (problem.correctionMessage) {
-        message += `\n\n  └ ${problem.correctionMessage}`;
+        message += `  └ ${problem.correctionMessage}`;
     }
     return message;
 }
 function getAnnotationMessage(problem) {
-    let message = `${problem.problemMessage}`;
+    let message = ``;
     if (problem.correctionMessage) {
         message += `\n\n${problem.correctionMessage}`;
     }
     if (problem.documentation) {
-        message += `\n\nSee ${problem.documentation} to learn more about this problem.`;
+        message += `\n\nSee the [documentation](${problem.documentation}) to learn more about this problem.`;
     }
     return message;
 }
