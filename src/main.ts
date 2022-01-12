@@ -147,10 +147,8 @@ async function run(): Promise<void> {
     core.info(`${result.errors.length} analyzer errors detected.`);
     if (actionDidFail) {
       core.setFailed(
-        `Dart Analyzer detected problems see the logs for more information.`,
+        `Dart Analyzer detected problems, see the logs for more information.`,
       );
-    } else {
-      core.info(`Finished.`);
     }
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message);

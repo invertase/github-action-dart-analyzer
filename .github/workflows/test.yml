@@ -24,4 +24,4 @@ jobs:
       - uses: ./
         with:
           working-directory: ./dart
-          annotate-only: false
+          annotate-only: true

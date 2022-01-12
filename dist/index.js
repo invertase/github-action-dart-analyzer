@@ -243,10 +243,7 @@ function run() {
             core.info(`${result.warnings.length} analyzer warnings detected.`);
             core.info(`${result.errors.length} analyzer errors detected.`);
             if (actionDidFail) {
-                core.setFailed(`Dart Analyzer detected problems see the logs for more information.`);
-            }
-            else {
-                core.info(`Finished.`);
+                core.setFailed(`Dart Analyzer detected problems, see the logs for more information.`);
             }
         }
         catch (error) {
