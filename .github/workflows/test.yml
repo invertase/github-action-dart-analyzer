@@ -1,16 +1,17 @@
-name: 'build-test'
+name: "build-test"
 on: # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
       - main
-      - 'releases/*'
+      - "releases/*"
 
 jobs:
   build: # make sure build/ci work properly
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
       - run: |
           npm install
       - run: |
@@ -19,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1
       - uses: ./
         with:
-          milliseconds: 1000
+          working-directory: ./dart
+          annotate-only: true

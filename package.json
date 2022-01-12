@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
-  "version": "0.0.0",
+  "name": "github-action-dart-analyzer",
+  "version": "1.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "A GitHub action to run Dart analyzer with annotation support.",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -11,6 +11,7 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
+    "build-and-package": "npm run build && npm run package",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
@@ -22,10 +23,11 @@
     "node",
     "setup"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Invertase <oss@invertase.io> (http://invertase.io)",
+  "license": "Apache-2.0",
   "dependencies": {
-    "@actions/core": "^1.6.0"
+    "@actions/core": "^1.6.0",
+    "@actions/exec": "^1.1.0"
   },
   "devDependencies": {
     "@types/node": "^16.10.5",
