@@ -3,9 +3,9 @@ import * as path from 'path';
 import { AnalyzerOptions, AnalyzerProblem, analyze } from './dart';
 
 function getProblemLogMessage(problem: AnalyzerProblem): string {
-  let message = `${problem.severity} ${problem.location.file}:${problem.location.range.start}:${problem.location.range.start.column}: ${problem.problemMessage}`;
+  let message = `${problem.location.file}:${problem.location.range.start.line}:${problem.location.range.start.column} ${problem.problemMessage}`;
   if (problem.correctionMessage) {
-    message += `\n  └ ${problem.correctionMessage}`;
+    message += `  └ ${problem.correctionMessage}`;
   }
   return message;
 }
