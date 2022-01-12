@@ -1,4 +1,4 @@
-name: "Dart Analyze"
+name: "Dart Analyze with Annotations"
 description: "A GitHub action to run Dart analyzer with annotation support."
 author: "Invertase"
 inputs:
