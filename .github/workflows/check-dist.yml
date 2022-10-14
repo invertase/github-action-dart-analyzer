@@ -23,8 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set Node.js 12.x
-        uses: actions/setup-node@v3
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3.5.1
         with:
           node-version: 16
 
