@@ -23,7 +23,7 @@ inputs:
     description: "The working directory to run the Dart analyzer in (defaults to `./`)."
     default: ./
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"
 branding:
   icon: "hexagon"
