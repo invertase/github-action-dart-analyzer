@@ -2,6 +2,9 @@
   <h1>⚒️ GitHub Action for Dart Analyzer</h1>
   <span>A GitHub action to run Dart analyzer with annotation support.</span>
 </p>
+ <a href="https://invertase.link/discord">
+   <img src="https://img.shields.io/discord/295953187817521152.svg?style=flat-square&colorA=7289da&label=Chat%20on%20Discord" alt="Chat on Discord">
+ </a>
 
 <a href="https://github.com/invertase/github-action-dart-analyzer/blob/main/LICENSE">License</a>
 
