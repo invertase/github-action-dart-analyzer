@@ -1,11 +1,14 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
+import * as fs from 'fs';
+import * as util from 'util';
 
 export interface AnalyzerOptions {
   fatalInfos: boolean;
   fatalWarnings: boolean;
   annotate: boolean;
   annotateOnly: boolean;
+  customLint: boolean;
   workingDirectory: string;
 }
 
@@ -52,8 +55,11 @@ export interface AnalyzerResult {
   errors: AnalyzerProblem[];
 }
 
-export async function analyze(cwd?: string): Promise<AnalyzerResult> {
-  const execOutput = await exec.getExecOutput(
+export async function analyze(
+  cwd: string,
+  customLint: boolean,
+): Promise<AnalyzerResult> {
+  const analyzeOutput = await exec.getExecOutput(
     'dart',
     ['analyze', '--format=json', '.'],
     {
@@ -62,7 +68,35 @@ export async function analyze(cwd?: string): Promise<AnalyzerResult> {
       ignoreReturnCode: true,
     },
   );
-  return parseAnalyzerResult(execOutput.stdout.trim());
+  const result = parseAnalyzerResult(analyzeOutput.stdout.trim());
+  if (customLint) {
+    const pubspec =
+      cwd == null
+        ? 'pubspec.yaml'
+        : cwd.endsWith('/')
+        ? cwd
+        : `${cwd}/pubspec.yaml`;
+    const readFile = util.promisify(fs.readFile);
+    const contents = await readFile(pubspec, 'utf8');
+    if (contents.includes('custom_lint:')) {
+      const customLintOutput = await exec.getExecOutput(
+        'dart',
+        ['run', 'custom_lint', '--format=json', '.'],
+        {
+          cwd,
+          silent: false,
+          ignoreReturnCode: true,
+        },
+      );
+      const customLintResult = parseAnalyzerResult(
+        customLintOutput.stdout.trim(),
+      );
+      result.infos.push(...customLintResult.infos);
+      result.warnings.push(...customLintResult.warnings);
+      result.errors.push(...customLintResult.errors);
+    }
+  }
+  return result;
 }
 
 export function parseAnalyzerResult(

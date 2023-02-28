@@ -49,6 +49,7 @@ async function run(): Promise<void> {
       fatalWarnings: core.getBooleanInput('fatal-warnings'),
       annotate: core.getBooleanInput('annotate'),
       annotateOnly: core.getBooleanInput('annotate-only'),
+      customLint: core.getBooleanInput('custom-lint'),
       workingDirectory: path.resolve(
         process.env['GITHUB_WORKSPACE'] || process.cwd(),
         core.getInput('working-directory'),
@@ -58,7 +59,7 @@ async function run(): Promise<void> {
     core.debug(
       `Running Dart analyzer with options: ${JSON.stringify(options)}`,
     );
-    const result = await analyze(options.workingDirectory);
+    const result = await analyze(options.workingDirectory, options.customLint);
 
     // Report info problems.
     core.startGroup('Dart Analyzer - Infos');
