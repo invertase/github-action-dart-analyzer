@@ -45,6 +45,11 @@ jobs:
           # (defaults to false).
           annotate-only: false
 
+          # (Optional) If set to true the GitHub action will run custom_lint
+          # if it is found as dependency in the pubspec.yaml
+          # (defaults to false).
+          custom-lint: false
+
           # (Optional) The working directory to run the Dart analyzer in 
           # (defaults to `./`).
           working-directory: ./

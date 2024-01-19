@@ -42,6 +42,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseAnalyzerResult = exports.analyze = exports.AnalyzerProblemSeverity = void 0;
 const core = __importStar(__nccwpck_require__(186));
 const exec = __importStar(__nccwpck_require__(514));
+const fs = __importStar(__nccwpck_require__(147));
+const util = __importStar(__nccwpck_require__(837));
 // False positive eslint error saying AnalyzerProblemSeverity is already defined.
 // eslint-disable-next-line no-shadow
 var AnalyzerProblemSeverity;
@@ -50,14 +52,35 @@ var AnalyzerProblemSeverity;
     AnalyzerProblemSeverity["WARNING"] = "WARNING";
     AnalyzerProblemSeverity["ERROR"] = "ERROR";
 })(AnalyzerProblemSeverity = exports.AnalyzerProblemSeverity || (exports.AnalyzerProblemSeverity = {}));
-function analyze(cwd) {
+function analyze(cwd, customLint) {
     return __awaiter(this, void 0, void 0, function* () {
-        const execOutput = yield exec.getExecOutput('dart', ['analyze', '--format=json', '.'], {
+        const analyzeOutput = yield exec.getExecOutput('dart', ['analyze', '--format=json', '.'], {
             cwd,
             silent: true,
             ignoreReturnCode: true,
         });
-        return parseAnalyzerResult(execOutput.stdout.trim());
+        const result = parseAnalyzerResult(analyzeOutput.stdout.trim());
+        if (customLint) {
+            const pubspec = cwd == null
+                ? 'pubspec.yaml'
+                : cwd.endsWith('/')
+                    ? cwd
+                    : `${cwd}/pubspec.yaml`;
+            const readFile = util.promisify(fs.readFile);
+            const contents = yield readFile(pubspec, 'utf8');
+            if (contents.includes('custom_lint:')) {
+                const customLintOutput = yield exec.getExecOutput('dart', ['run', 'custom_lint', '--format=json', '.'], {
+                    cwd,
+                    silent: false,
+                    ignoreReturnCode: true,
+                });
+                const customLintResult = parseAnalyzerResult(customLintOutput.stdout.trim());
+                result.infos.push(...customLintResult.infos);
+                result.warnings.push(...customLintResult.warnings);
+                result.errors.push(...customLintResult.errors);
+            }
+        }
+        return result;
     });
 }
 exports.analyze = analyze;
@@ -181,10 +204,11 @@ function run() {
                 fatalWarnings: core.getBooleanInput('fatal-warnings'),
                 annotate: core.getBooleanInput('annotate'),
                 annotateOnly: core.getBooleanInput('annotate-only'),
+                customLint: core.getBooleanInput('custom-lint'),
                 workingDirectory: path.resolve(process.env['GITHUB_WORKSPACE'] || process.cwd(), core.getInput('working-directory')),
             };
             core.debug(`Running Dart analyzer with options: ${JSON.stringify(options)}`);
-            const result = yield (0, dart_1.analyze)(options.workingDirectory);
+            const result = yield (0, dart_1.analyze)(options.workingDirectory, options.customLint);
             // Report info problems.
             core.startGroup('Dart Analyzer - Infos');
             if (result.infos.length) {

@@ -25,3 +25,4 @@ jobs:
         with:
           working-directory: ./dart
           annotate-only: true
+          fatal-warnings: false
