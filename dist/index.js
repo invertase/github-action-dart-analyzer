@@ -71,7 +71,7 @@ function analyze(cwd, customLint) {
             if (contents.includes('custom_lint:')) {
                 const customLintOutput = yield exec.getExecOutput('dart', ['run', 'custom_lint', '--format=json', '.'], {
                     cwd,
-                    silent: false,
+                    silent: true,
                     ignoreReturnCode: true,
                 });
                 const customLintResult = parseAnalyzerResult(customLintOutput.stdout.trim());
