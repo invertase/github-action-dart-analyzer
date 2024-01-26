@@ -84,7 +84,7 @@ export async function analyze(
         ['run', 'custom_lint', '--format=json', '.'],
         {
           cwd,
-          silent: false,
+          silent: true,
           ignoreReturnCode: true,
         },
       );
