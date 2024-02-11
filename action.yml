@@ -27,7 +27,7 @@ inputs:
     description: "The working directory to run the Dart analyzer in (defaults to `./`)."
     default: ./
 runs:
-  using: "node16"
+  using: "node20"
   main: "dist/index.js"
 branding:
   icon: "search"
