@@ -51,7 +51,7 @@ var AnalyzerProblemSeverity;
     AnalyzerProblemSeverity["INFO"] = "INFO";
     AnalyzerProblemSeverity["WARNING"] = "WARNING";
     AnalyzerProblemSeverity["ERROR"] = "ERROR";
-})(AnalyzerProblemSeverity = exports.AnalyzerProblemSeverity || (exports.AnalyzerProblemSeverity = {}));
+})(AnalyzerProblemSeverity || (exports.AnalyzerProblemSeverity = AnalyzerProblemSeverity = {}));
 function analyze(cwd, customLint) {
     return __awaiter(this, void 0, void 0, function* () {
         const analyzeOutput = yield exec.getExecOutput('dart', ['analyze', '--format=json', '.'], {
@@ -215,7 +215,8 @@ function run() {
                 for (const info of result.infos) {
                     core.info(getProblemLogMessage(info, !options.annotate));
                     if (options.annotate) {
-                        core.notice(getAnnotationMessage(info), getProblemAnnotationProperties(info));
+                        const annotate = options.fatalInfos ? core.error : core.notice;
+                        annotate(getAnnotationMessage(info), getProblemAnnotationProperties(info));
                     }
                     core.info('');
                 }
@@ -230,7 +231,8 @@ function run() {
                 for (const warning of result.warnings) {
                     core.info(getProblemLogMessage(warning, !options.annotate));
                     if (options.annotate) {
-                        core.warning(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
+                        const annotate = options.fatalWarnings ? core.error : core.warning;
+                        annotate(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
                     }
                     core.info('');
                 }
@@ -846,7 +848,7 @@ class OidcClient {
                 .catch(error => {
                 throw new Error(`Failed to get ID Token. \n 
         Error Code : ${error.statusCode}\n 
-        Error Message: ${error.result.message}`);
+        Error Message: ${error.message}`);
             });
             const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
             if (!id_token) {

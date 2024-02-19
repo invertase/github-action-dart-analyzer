@@ -74,8 +74,8 @@ export async function analyze(
       cwd == null
         ? 'pubspec.yaml'
         : cwd.endsWith('/')
-        ? cwd
-        : `${cwd}/pubspec.yaml`;
+          ? cwd
+          : `${cwd}/pubspec.yaml`;
     const readFile = util.promisify(fs.readFile);
     const contents = await readFile(pubspec, 'utf8');
     if (contents.includes('custom_lint:')) {
