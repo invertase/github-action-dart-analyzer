@@ -1,6 +1,6 @@
 {
   "name": "github-action-dart-analyzer",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "private": true,
   "description": "A GitHub action to run Dart analyzer with annotation support.",
   "main": "lib/main.js",
