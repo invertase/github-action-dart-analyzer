@@ -215,7 +215,8 @@ function run() {
                 for (const info of result.infos) {
                     core.info(getProblemLogMessage(info, !options.annotate));
                     if (options.annotate) {
-                        core.notice(getAnnotationMessage(info), getProblemAnnotationProperties(info));
+                        const annotate = options.fatalInfos ? core.error : core.notice;
+                        annotate(getAnnotationMessage(info), getProblemAnnotationProperties(info));
                     }
                     core.info('');
                 }
@@ -230,7 +231,8 @@ function run() {
                 for (const warning of result.warnings) {
                     core.info(getProblemLogMessage(warning, !options.annotate));
                     if (options.annotate) {
-                        core.warning(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
+                        const annotate = options.fatalWarnings ? core.error : core.warning;
+                        annotate(getAnnotationMessage(warning), getProblemAnnotationProperties(warning));
                     }
                     core.info('');
                 }
