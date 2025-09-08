@@ -67,7 +67,8 @@ async function run(): Promise<void> {
       for (const info of result.infos) {
         core.info(getProblemLogMessage(info, !options.annotate));
         if (options.annotate) {
-          core.notice(
+          const annotate = options.fatalInfos ? core.error : core.notice;
+          annotate(
             getAnnotationMessage(info),
             getProblemAnnotationProperties(info),
           );
@@ -85,7 +86,8 @@ async function run(): Promise<void> {
       for (const warning of result.warnings) {
         core.info(getProblemLogMessage(warning, !options.annotate));
         if (options.annotate) {
-          core.warning(
+          const annotate = options.fatalWarnings ? core.error : core.warning;
+          annotate(
             getAnnotationMessage(warning),
             getProblemAnnotationProperties(warning),
           );
