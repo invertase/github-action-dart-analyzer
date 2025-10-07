@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
-      - uses: invertase/github-action-dart-analyzer@v1
+      - uses: invertase/github-action-dart-analyzer@v3
         with:
           # (Optional) Treat info level issues as fatal.
           fatal-infos: false
